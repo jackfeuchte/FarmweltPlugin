@@ -65,7 +65,7 @@ use-bstats: true # Set to false to disable bStats
 ```
 
 ## Installation
-1. Download the latest version from [here](https://github.com/dervonnebe/FarmweltPlugin/releases)
+1. Download the latest version from [here](https://github.com/jackfeuchte/FarmweltPlugin/releases)
 2. Copy the plugin to your plugins folder
 3. For enhanced world management, install Multiverse-Core (recommended but not required)
 4. For placeholder support, install PlaceholderAPI
@@ -84,14 +84,14 @@ https://bstats.org/plugin/bukkit/FarmworldPlugin/24022
 
 ## Support
 • Discord: dervonnebe
-• https://github.com/dervonnebe/FarmweltPlugin/issues
+• https://github.com/jackfeuchte/FarmweltPlugin/issues
 
 ## 🔧 Development / Building from Source
 This project uses Gradle as its build system:
 
 ```bash
 # Clone the repository
-git clone https://github.com/dervonnebe/FarmweltPlugin.git
+git clone https://github.com/jackfeuchte/FarmweltPlugin.git
 cd FarmweltPlugin
 
 # Build the project

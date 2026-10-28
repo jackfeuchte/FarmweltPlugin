@@ -22,7 +22,7 @@ Ein leistungsstarkes Spigot-Plugin für automatisch resettende Farmwelten. Ideal
 - Optional: PlaceholderAPI für Placeholder-Funktionen
 
 ## Installation
-1. Lade die neueste Version des Plugins von [hier](https://github.com/dervonnebe/FarmweltPlugin/releases) herunter
+1. Lade die neueste Version des Plugins von [hier](https://github.com/jackfeuchte/FarmweltPlugin/releases) herunter
 2. Platziere die .jar Datei in deinem Plugins-Ordner
 3. Für erweiterte Weltenverwaltung installiere Multiverse-Core (empfohlen, aber nicht zwingend erforderlich)
 4. Für Placeholder-Unterstützung installiere PlaceholderAPI
@@ -127,7 +127,7 @@ cron: "" # Optional, z.B. "0 0 3 ? * MON" (überschreibt daily/weekly/monthly)
 
 ## Support
 Bei Fragen oder Problemen:
-- Erstelle ein [GitHub Issue](https://github.com/dervonnebe/FarmweltPlugin/issues)
+- Erstelle ein [GitHub Issue](https://github.com/jackfeuchte/FarmweltPlugin/issues)
 - Kontaktiere mich auf Discord: dervonnebe
 
 ## Lizenz
@@ -146,7 +146,7 @@ Dieses Projekt verwendet Gradle als Build-System:
 
 ```bash
 # Repository klonen
-git clone https://github.com/dervonnebe/FarmweltPlugin.git
+git clone https://github.com/jackfeuchte/FarmweltPlugin.git
 cd FarmweltPlugin
 
 # Projekt bauen

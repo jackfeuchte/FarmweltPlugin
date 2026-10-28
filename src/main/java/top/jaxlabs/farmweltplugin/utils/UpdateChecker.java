@@ -17,7 +17,7 @@ import java.net.URL;
 public class UpdateChecker implements Listener {
 
     private final JavaPlugin plugin;
-    private final String repoUrl = "https://api.github.com/repos/dervonnebe/FarmweltPlugin/releases/latest";
+    private final String repoUrl = "https://api.github.com/repos/jackfeuchte/FarmweltPlugin/releases/latest";
     private String latestVersion;
     private String updateTitle;
     private boolean updateAvailable = false;
@@ -47,14 +47,14 @@ public class UpdateChecker implements Listener {
                     String normalizedCurrent = normalizeVersion(currentVersion);
                     String normalizedLatest = normalizeVersion(latestVersion);
                     
-                    if (!normalizedCurrent.equals(normalizedLatest)) {
+                    if (isNewer(normalizedLatest, normalizedCurrent)) {
                         updateAvailable = true;
                         plugin.getLogger().info("--------------------------------------------------");
                         plugin.getLogger().info("A new version of FarmweltPlugin is available!");
                         plugin.getLogger().info("Current version: " + currentVersion);
                         plugin.getLogger().info("New version: " + latestVersion);
                         plugin.getLogger().info("Title: " + updateTitle);
-                        plugin.getLogger().info("Download: https://github.com/dervonnebe/FarmweltPlugin/releases/latest");
+                        plugin.getLogger().info("Download: https://github.com/jackfeuchte/FarmweltPlugin/releases/latest");
                         plugin.getLogger().info("--------------------------------------------------");
                     } else {
                          plugin.getLogger().info("FarmweltPlugin is up to date.");
@@ -77,11 +77,29 @@ public class UpdateChecker implements Listener {
              player.sendMessage(ChatColor.GOLD + "FarmweltPlugin Update Available!");
              player.sendMessage(ChatColor.AQUA + "Version: " + ChatColor.WHITE + latestVersion);
              player.sendMessage(ChatColor.AQUA + "Title: " + ChatColor.WHITE + updateTitle);
-             player.sendMessage(ChatColor.GREEN + "Download: " + ChatColor.UNDERLINE + "https://github.com/dervonnebe/FarmweltPlugin/releases/latest");
+             player.sendMessage(ChatColor.GREEN + "Download: " + ChatColor.UNDERLINE + "https://github.com/jackfeuchte/FarmweltPlugin/releases/latest");
              player.sendMessage(ChatColor.GRAY + "--------------------------------------------------");
         }
     }
     
+    static boolean isNewer(String latest, String current) {
+        String[] a = latest.split("[.-]");
+        String[] b = current.split("[.-]");
+        for (int i = 0; i < Math.max(a.length, b.length); i++) {
+            int x = i < a.length ? parse(a[i]) : 0;
+            int y = i < b.length ? parse(b[i]) : 0;
+            if (x != y) {
+                return x > y;
+            }
+        }
+        return false;
+    }
+
+    private static int parse(String part) {
+        String digits = part.replaceAll("\\D", "");
+        return digits.isEmpty() ? 0 : Integer.parseInt(digits);
+    }
+
     /**
      * Normalizes a version string by removing the "v" prefix and converting to lowercase.
      * This ensures consistent version comparison regardless of prefix format.
