@@ -39,6 +39,12 @@ public class MenuListener implements Listener {
         ItemMeta meta = clickedItem.getItemMeta();
         String displayName = meta.getDisplayName();
         
+        if (displayName.equals(plugin.getLanguageString("menu-back"))) {
+            player.closeInventory();
+            player.performCommand("farmwelt back");
+            return;
+        }
+
         // Normal Farmwelt
         String normalName = plugin.getConfig().getString("menu.normal-world.name", "&aFarmwelt").replace("&", "§");
         if (displayName.equals(normalName)) {

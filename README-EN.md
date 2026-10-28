@@ -18,11 +18,14 @@ The perfect solution for automatically resetting farm worlds in Minecraft
 💻 Multiverse-Core integration (optional)  
 
 ## Commands
-• `/farmwelt` - Teleports to normal farm world  
+• `/farmwelt` (or `/fw`) - Opens the farm world menu  
+• `/farmwelt tp` - Teleports directly to normal farm world  
+• `/farmwelt back` - Teleports you back (also in the menu)  
 • `/nether` - Teleports to Nether farm world  
 • `/end` - Teleports to End farm world  
 • `/farmwelt reset` - Resets the farm world (admin)  
 • `/farmwelt reload` - Reloads the configuration (admin)  
+• `/farmwelt <enable|disable> <nether|end>` - Enables/disables Nether or End farm world (admin)  
 
 ## Permissions
 • `farmwelt.use` - Allows use of the /farmwelt command  

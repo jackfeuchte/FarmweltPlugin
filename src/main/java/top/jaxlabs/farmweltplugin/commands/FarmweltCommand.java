@@ -4,6 +4,7 @@ import top.jaxlabs.farmweltplugin.Main;
 import top.jaxlabs.farmweltplugin.utils.FarmweltMenu;
 import top.jaxlabs.farmweltplugin.utils.WorldUtils;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,7 +32,17 @@ public class FarmweltCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if (args.length == 0) {
+        if (args.length == 0 || args[0].equalsIgnoreCase("menu")) {
+            if (!player.hasPermission(plugin.getConfig().getString("default-permission", "farmwelt.use"))) {
+                player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("no-permission"));
+                return true;
+            }
+
+            farmweltMenu.openMenu(player);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("tp")) {
             if (!player.hasPermission(plugin.getConfig().getString("default-permission", "farmwelt.use"))) {
                 player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("no-permission"));
                 return true;
@@ -53,16 +64,6 @@ public class FarmweltCommand implements CommandExecutor, TabCompleter {
             } else {
                 player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("no-world"));
             }
-            return true;
-        }
-
-        if (args[0].equalsIgnoreCase("menu")) {
-            if (!player.hasPermission(plugin.getConfig().getString("default-permission", "farmwelt.use"))) {
-                player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("no-permission"));
-                return true;
-            }
-            
-            farmweltMenu.openMenu(player);
             return true;
         }
 
@@ -123,6 +124,36 @@ public class FarmweltCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if (args[0].equalsIgnoreCase("enable") || args[0].equalsIgnoreCase("disable")) {
+            if (!player.hasPermission(plugin.getConfig().getString("admin-permission", "farmwelt.admin"))) {
+                player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("no-permission"));
+                return true;
+            }
+
+            if (args.length < 2 || !(args[1].equalsIgnoreCase("nether") || args[1].equalsIgnoreCase("end"))) {
+                player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("toggle-usage"));
+                return true;
+            }
+
+            String type = args[1].toLowerCase();
+            boolean enable = args[0].equalsIgnoreCase("enable");
+            plugin.getConfig().set("menu." + type + "-world.enabled", enable);
+            plugin.saveConfig();
+
+            if (enable) {
+                String worldName = type.equals("nether") ? plugin.getNetherWorldName() : plugin.getEndWorldName();
+                if (worldUtils.worldExists(worldName)) {
+                    worldUtils.loadWorld(worldName);
+                } else {
+                    worldUtils.createWorld(worldName, type.equals("nether") ? World.Environment.NETHER : World.Environment.THE_END);
+                    plugin.updateLastResetTime(worldName);
+                }
+            }
+
+            player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString(type + (enable ? "-enabled" : "-disabled")));
+            return true;
+        }
+
         if (args[0].equalsIgnoreCase("back")) {
             if (!plugin.isBackEnabled()) {
                 player.sendMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("back-disabled"));
@@ -148,13 +179,20 @@ public class FarmweltCommand implements CommandExecutor, TabCompleter {
         
         if (args.length == 1) {
             completions.add("menu");
+            completions.add("tp");
             if (plugin.isBackEnabled()) {
                 completions.add("back");
             }
             if (sender.hasPermission(plugin.getConfig().getString("admin-permission", "farmwelt.admin"))) {
                 completions.add("reset");
                 completions.add("reload");
+                completions.add("enable");
+                completions.add("disable");
             }
+        } else if (args.length == 2 && (args[0].equalsIgnoreCase("enable") || args[0].equalsIgnoreCase("disable")) &&
+                sender.hasPermission(plugin.getConfig().getString("admin-permission", "farmwelt.admin"))) {
+            completions.add("nether");
+            completions.add("end");
         } else if (args.length == 2 && args[0].equalsIgnoreCase("reset") && 
                 sender.hasPermission(plugin.getConfig().getString("admin-permission", "farmwelt.admin"))) {
             completions.add("normal");

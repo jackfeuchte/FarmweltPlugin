@@ -10,8 +10,9 @@ commands:
     farmwelt:
         aliases:
             - farmworld
+            - fw
         description: Main command for the FarmweltPlugin
-        usage: /farmwelt [reset|reload]
+        usage: /farmwelt [menu|tp|back|reset|reload|enable|disable]
     nether:
         description: Teleport to the nether farmworld
         usage: /nether

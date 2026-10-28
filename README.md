@@ -30,11 +30,14 @@ Ein leistungsstarkes Spigot-Plugin für automatisch resettende Farmwelten. Ideal
 6. Die Konfigurationsdatei wird automatisch erstellt
 
 ## Befehle
-- `/farmwelt` - Teleportiert dich zur normalen Farmwelt
+- `/farmwelt` (oder `/fw`) - Öffnet das Farmwelt-Menü
+- `/farmwelt tp` - Teleportiert dich direkt zur normalen Farmwelt
+- `/farmwelt back` - Teleportiert dich zurück (auch im Menü)
 - `/nether` - Teleportiert dich zur Nether-Farmwelt
 - `/end` - Teleportiert dich zur End-Farmwelt
 - `/farmwelt reset` - Setzt die Farmwelt zurück (Admin)
 - `/farmwelt reload` - Lädt die Konfiguration neu (Admin)
+- `/farmwelt <enable|disable> <nether|end>` - Aktiviert/deaktiviert Nether- oder End-Farmwelt (Admin)
 
 ## Berechtigungen
 - `farmwelt.use` - Erlaubt die Nutzung des /farmwelt Befehls

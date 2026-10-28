@@ -61,6 +61,14 @@ public class FarmweltMenu {
             inventory.setItem(16, endWorldItem);
         }
 
+        if (plugin.isBackEnabled() && plugin.getBackLocation(player.getUniqueId()) != null) {
+            ItemStack backItem = new ItemStack(Material.ENDER_PEARL);
+            ItemMeta backMeta = backItem.getItemMeta();
+            backMeta.setDisplayName(plugin.getLanguageString("menu-back"));
+            backItem.setItemMeta(backMeta);
+            inventory.setItem(22, backItem);
+        }
+
         player.openInventory(inventory);
     }
 
