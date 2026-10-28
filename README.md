@@ -91,6 +91,7 @@ weekly: false
 monthly: false
 day-of-week: 1 # 1 (Montag) bis 7 (Sonntag)
 day-of-month: 1 # 1 bis 31
+cron: "" # Optional, z.B. "0 0 3 ? * MON" (überschreibt daily/weekly/monthly)
 ```
 
 ### Konfigurationsoptionen erklärt
@@ -110,6 +111,7 @@ day-of-month: 1 # 1 bis 31
   - `monthly`: Aktiviert monatliche Resets
   - `day-of-week`: Tag für wöchentliche Resets
   - `day-of-month`: Tag für monatliche Resets
+  - `cron`: Optionaler Quartz-Cron-Ausdruck (Sekunde Minute Stunde Tag Monat Wochentag), überschreibt daily/weekly/monthly
 
 ## Häufige Probleme und Lösungen
 

@@ -59,6 +59,7 @@ reset-schedule:
   monthly: false
   day-of-week: 1    # 1 (Monday) to 7 (Sunday)
   day-of-month: 1   # 1 to 31
+  cron: ""         # Optional Quartz cron, e.g. "0 0 3 ? * MON" (overrides daily/weekly/monthly)
 
 use-bstats: true # Set to false to disable bStats
 ```

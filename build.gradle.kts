@@ -20,6 +20,7 @@ dependencies {
     compileOnly("org.mvplugins.multiverse.core:multiverse-core:5.1.0")
     compileOnly("me.clip:placeholderapi:2.11.5")
     implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("com.cronutils:cron-utils:9.2.1")
 }
 
 java {
@@ -32,6 +33,8 @@ tasks {
     shadowJar {
         archiveClassifier.set("")
         relocate("org.bstats", "top.jaxlabs.farmweltplugin.utils.bstats")
+        relocate("com.cronutils", "top.jaxlabs.farmweltplugin.libs.cronutils")
+        relocate("org.slf4j", "top.jaxlabs.farmweltplugin.libs.slf4j")
     }
 
     build {

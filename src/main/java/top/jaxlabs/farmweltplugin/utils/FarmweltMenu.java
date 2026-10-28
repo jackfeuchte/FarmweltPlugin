@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -205,6 +206,10 @@ public class FarmweltMenu {
     }
     
     private String getNextResetDate() {
+        ZonedDateTime cronReset = ScheduledReset.nextCronReset(plugin);
+        if (cronReset != null) {
+            return cronReset.format(DATE_FORMAT);
+        }
         LocalDateTime now = LocalDateTime.now(ZoneId.of(plugin.getConfig().getString("reset-schedule.timezone", "Europe/Berlin")));
         LocalDateTime nextReset = null;
         

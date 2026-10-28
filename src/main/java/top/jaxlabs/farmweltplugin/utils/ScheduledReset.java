@@ -1,11 +1,16 @@
 package top.jaxlabs.farmweltplugin.utils;
 
+import com.cronutils.model.CronType;
+import com.cronutils.model.definition.CronDefinitionBuilder;
+import com.cronutils.model.time.ExecutionTime;
+import com.cronutils.parser.CronParser;
 import top.jaxlabs.farmweltplugin.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ScheduledReset extends BukkitRunnable {
@@ -13,6 +18,9 @@ public class ScheduledReset extends BukkitRunnable {
     private final WorldUtils worldUtils;
     private LocalDateTime lastReset;
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private static final CronParser CRON_PARSER = new CronParser(CronDefinitionBuilder.instanceDefinitionFor(CronType.QUARTZ));
+    private String cronExpression = "";
+    private ZonedDateTime nextCronReset;
 
     public ScheduledReset(Main plugin, WorldUtils worldUtils) {
         this.plugin = plugin;
@@ -20,18 +28,52 @@ public class ScheduledReset extends BukkitRunnable {
         this.lastReset = LocalDateTime.now(ZoneId.of(plugin.getConfig().getString("reset-schedule.timezone", "Europe/Berlin")));
     }
 
+    public static ZonedDateTime nextCronReset(Main plugin) {
+        String expression = plugin.getConfig().getString("reset-schedule.cron", "");
+        if (expression.isBlank()) {
+            return null;
+        }
+        ZoneId zone = ZoneId.of(plugin.getConfig().getString("reset-schedule.timezone", "Europe/Berlin"));
+        try {
+            return ExecutionTime.forCron(CRON_PARSER.parse(expression).validate())
+                    .nextExecution(ZonedDateTime.now(zone))
+                    .orElse(null);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     @Override
     public void run() {
+        String cron = plugin.getConfig().getString("reset-schedule.cron", "");
+        if (!cron.isBlank()) {
+            if (!cron.equals(cronExpression)) {
+                cronExpression = cron;
+                nextCronReset = nextCronReset(plugin);
+                if (nextCronReset == null) {
+                    plugin.getLogger().warning("Invalid reset-schedule.cron: " + cron);
+                }
+            }
+            if (nextCronReset != null && !ZonedDateTime.now(nextCronReset.getZone()).isBefore(nextCronReset)) {
+                nextCronReset = nextCronReset(plugin);
+                announceReset();
+            }
+            return;
+        }
+        cronExpression = "";
+
         LocalDateTime now = LocalDateTime.now(ZoneId.of(plugin.getConfig().getString("reset-schedule.timezone", "Europe/Berlin")));
         
         if (shouldReset(now)) {
             // lastReset direkt setzen, damit kein mehrfacher Reset im Loop passiert
             lastReset = now;
-            Bukkit.broadcastMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("reset-announcement"));
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                resetAllFarmworlds();
-            }, 6000L);
+            announceReset();
         }
+    }
+
+    private void announceReset() {
+        Bukkit.broadcastMessage(plugin.getLanguageString("prefix") + plugin.getLanguageString("reset-announcement"));
+        Bukkit.getScheduler().runTaskLater(plugin, this::resetAllFarmworlds, 6000L);
     }
     
     private void resetAllFarmworlds() {

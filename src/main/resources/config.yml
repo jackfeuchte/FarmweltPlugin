@@ -68,6 +68,10 @@ reset-schedule:
   monthly: false
   day-of-week: 1 # 1 (Monday) to 7 (Sunday)
   day-of-month: 1 # 1 to 31
+  # Optional Quartz cron expression, overrides daily/weekly/monthly when set.
+  # Format: second minute hour day-of-month month day-of-week
+  # Examples: "0 0 3 ? * MON" (every Monday 03:00), "0 0 3 L * ?" (last day of month 03:00)
+  cron: ""
 
 # Menu configuration
 menu:

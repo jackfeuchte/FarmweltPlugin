@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class FarmweltPlaceholders extends PlaceholderExpansion {
@@ -136,6 +137,11 @@ public class FarmweltPlaceholders extends PlaceholderExpansion {
     }
     
     private LocalDateTime calculateNextReset(String worldName) {
+        ZonedDateTime cronReset = ScheduledReset.nextCronReset(plugin);
+        if (cronReset != null) {
+            return cronReset.toLocalDateTime();
+        }
+
         if (!plugin.getConfig().getBoolean("reset-schedule.daily") && 
             !plugin.getConfig().getBoolean("reset-schedule.weekly") && 
             !plugin.getConfig().getBoolean("reset-schedule.monthly")) {
