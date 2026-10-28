@@ -38,6 +38,7 @@ Ein leistungsstarkes Spigot-Plugin für automatisch resettende Farmwelten. Ideal
 - `/farmwelt reset` - Setzt die Farmwelt zurück (Admin)
 - `/farmwelt reload` - Lädt die Konfiguration neu (Admin)
 - `/farmwelt <enable|disable> <nether|end>` - Aktiviert/deaktiviert Nether- oder End-Farmwelt (Admin)
+- Admins haben im Menü einen Admin-Knopf: Klick auf eine Welt aktiviert/deaktiviert sie, Shift-Klick setzt sie zurück
 
 ## Berechtigungen
 - `farmwelt.use` - Erlaubt die Nutzung des /farmwelt Befehls

@@ -26,6 +26,7 @@ The perfect solution for automatically resetting farm worlds in Minecraft
 • `/farmwelt reset` - Resets the farm world (admin)  
 • `/farmwelt reload` - Reloads the configuration (admin)  
 • `/farmwelt <enable|disable> <nether|end>` - Enables/disables Nether or End farm world (admin)  
+• Admins get an admin button in the menu: click a world to enable/disable it, shift-click to reset it  
 
 ## Permissions
 • `farmwelt.use` - Allows use of the /farmwelt command  

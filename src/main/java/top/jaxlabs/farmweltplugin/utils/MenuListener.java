@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -15,6 +16,13 @@ public class MenuListener implements Listener {
     public MenuListener(Main plugin, WorldUtils worldUtils) {
         this.plugin = plugin;
         this.worldUtils = worldUtils;
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getPlayer() instanceof Player player) {
+            plugin.getFarmweltMenu().leaveAdminMode(player);
+        }
     }
 
     @EventHandler
@@ -30,7 +38,37 @@ public class MenuListener implements Listener {
         }
 
         event.setCancelled(true);
-        
+
+        if (event.getRawSlot() >= event.getView().getTopInventory().getSize()) {
+            return;
+        }
+
+        FarmweltMenu menu = plugin.getFarmweltMenu();
+        if (event.getRawSlot() == FarmweltMenu.ADMIN_SLOT && menu.isAdmin(player)) {
+            menu.toggleAdminMode(player, event.getView().getTopInventory());
+            return;
+        }
+
+        if (menu.isAdminMode(player)) {
+            String type = switch (event.getRawSlot()) {
+                case FarmweltMenu.NORMAL_SLOT -> "normal";
+                case FarmweltMenu.NETHER_SLOT -> "nether";
+                case FarmweltMenu.END_SLOT -> "end";
+                default -> null;
+            };
+            if (type == null) {
+                return;
+            }
+            if (event.isShiftClick()) {
+                player.performCommand("farmwelt reset " + type);
+            } else if (!type.equals("normal")) {
+                boolean enabled = plugin.getConfig().getBoolean("menu." + type + "-world.enabled", false);
+                player.performCommand("farmwelt " + (enabled ? "disable " : "enable ") + type);
+            }
+            menu.render(event.getView().getTopInventory(), player);
+            return;
+        }
+
         ItemStack clickedItem = event.getCurrentItem();
         if (clickedItem == null || !clickedItem.hasItemMeta() || !clickedItem.getItemMeta().hasDisplayName()) {
             return;
